@@ -49,7 +49,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
                 .withDetail(exception.getLocalizedMessage())
                 .withMessage("Something went wrong")
                 .withErrorCode("502")
-                .withStatus(httpStatus.BAD_GATEWAY)
+                .withStatus(HttpStatus.BAD_GATEWAY)
                 .withTimeStamp(LocalDateTime.now(ZoneOffset.UTC))
                 .build();
         return new ResponseEntity<>(errorResponse, errorResponse.getHttpStatus());
