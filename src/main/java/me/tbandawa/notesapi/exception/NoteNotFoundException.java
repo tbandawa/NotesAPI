@@ -6,8 +6,8 @@ public class NoteNotFoundException extends Exception {
 		super();
 	}
 	
-	public NoteNotFoundException(String message) {
-		super(message);
+	public NoteNotFoundException(String resourceName, String resourceIdentifier, Object fieldValue) {
+		super(String.format("%s with %s : %s not found", resourceName, resourceIdentifier, fieldValue));
 	}
 	
 	public NoteNotFoundException(String message, Throwable throwable) {

@@ -15,10 +15,11 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 	
     @ExceptionHandler({NoteNotFoundException.class})
-    public ResponseEntity<ErrorResponse> noteNotFound(NoteNotFoundException ex, WebRequest request){
-        ErrorResponse errorResponse =new ErrorResponse.ErrorResponseBuilder()
-        		.withDetail("Not able to find customer record")
-                .withMessage("Not a valid user id.Please provide a valid user id or contact system admin.")
+    public ResponseEntity<ErrorResponse> noteNotFound(
+    		NoteNotFoundException noteNotFoundException, WebRequest request){
+        ErrorResponse errorResponse = new ErrorResponse.ErrorResponseBuilder()
+        		.withDetail(noteNotFoundException.getLocalizedMessage())
+                .withMessage("Note record not found")
                 .withErrorCode("404")
                 .withStatus(HttpStatus.NOT_FOUND)
                 .withTimeStamp(LocalDateTime.now(ZoneOffset.UTC))
@@ -27,11 +28,12 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     }
     
     @ExceptionHandler(NoteServiceException.class)
-    protected ResponseEntity<Object> handleCustomAPIException(NoteServiceException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
-    	ErrorResponse errorResponse =new ErrorResponse.ErrorResponseBuilder()
+    protected ResponseEntity<Object> handleCustomAPIException(
+    		NoteServiceException noteNotFoundException, HttpHeaders headers, HttpStatus status, WebRequest request) {
+    	ErrorResponse errorResponse = new ErrorResponse.ErrorResponseBuilder()
                 .withStatus(status)
-                .withDetail("custom exception")
-                .withMessage(ex.getLocalizedMessage())
+                .withDetail(noteNotFoundException.getLocalizedMessage())
+                .withMessage("Note Service Exception")
                 .withErrorCode("503")
                 .withStatus(status.SERVICE_UNAVAILABLE)
                 .withTimeStamp(LocalDateTime.now(ZoneOffset.UTC))
@@ -40,13 +42,14 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     }
     
     @ExceptionHandler(Exception.class)
-    protected ResponseEntity<Object> handleCustomAPIException(Exception ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
-    	ErrorResponse errorResponse =new ErrorResponse.ErrorResponseBuilder()
-                .withStatus(status)
-                .withDetail("Something went wrong")
-                .withMessage(ex.getLocalizedMessage())
+    protected ResponseEntity<Object> handleCustomAPIException(
+    		Exception exception, HttpHeaders httpHeaders, HttpStatus httpStatus, WebRequest webRequest) {
+    	ErrorResponse errorResponse = new ErrorResponse.ErrorResponseBuilder()
+                .withStatus(httpStatus)
+                .withDetail(exception.getLocalizedMessage())
+                .withMessage("Something went wrong")
                 .withErrorCode("502")
-                .withStatus(status.BAD_GATEWAY)
+                .withStatus(httpStatus.BAD_GATEWAY)
                 .withTimeStamp(LocalDateTime.now(ZoneOffset.UTC))
                 .build();
         return new ResponseEntity<>(errorResponse, errorResponse.getHttpStatus());
