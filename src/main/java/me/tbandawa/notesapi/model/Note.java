@@ -25,10 +25,10 @@ public class Note implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank
+    @NotBlank(message = "Note title must not be empty")
     private String title;
 
-    @NotBlank
+    @NotBlank(message = "Note content must not be empty")
     private String content;
 
     @Column(nullable = false, updatable = false)

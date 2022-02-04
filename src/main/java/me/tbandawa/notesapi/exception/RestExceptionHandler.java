@@ -6,6 +6,8 @@ import java.time.LocalDateTime;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.ObjectError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
@@ -43,9 +45,9 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     
     @ExceptionHandler(Exception.class)
     protected ResponseEntity<Object> handleCustomAPIException(
-    		Exception exception, HttpHeaders httpHeaders, HttpStatus httpStatus, WebRequest webRequest) {
+    		Exception exception, HttpHeaders headers, HttpStatus status, WebRequest request) {
     	ErrorResponse errorResponse = new ErrorResponse.ErrorResponseBuilder()
-                .withStatus(httpStatus)
+                .withStatus(status)
                 .withDetail(exception.getLocalizedMessage())
                 .withMessage("Something went wrong")
                 .withErrorCode("502")
@@ -53,6 +55,26 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
                 .withTimeStamp(LocalDateTime.now(ZoneOffset.UTC))
                 .build();
         return new ResponseEntity<>(errorResponse, errorResponse.getHttpStatus());
+    }
+    
+    @Override
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(
+    		MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+    	
+    	String validationErrors = "";
+        for(ObjectError error : ex.getBindingResult().getAllErrors()) {
+        	validationErrors += (error.getDefaultMessage() + System.lineSeparator());
+        }
+  
+    	ErrorResponse errorResponse = new ErrorResponse.ErrorResponseBuilder()
+                .withStatus(status)
+                .withDetail(validationErrors)
+                .withMessage("Invalid Inputs")
+                .withErrorCode("400")
+                .withStatus(status.BAD_REQUEST)
+                .withTimeStamp(LocalDateTime.now(ZoneOffset.UTC))
+                .build();
+    	return new ResponseEntity<>(errorResponse, errorResponse.getHttpStatus());
     }
 
 }
