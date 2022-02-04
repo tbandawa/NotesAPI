@@ -1,7 +1,6 @@
 package me.tbandawa.notesapi.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -26,10 +25,10 @@ public class Note implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-	@NotBlank(message = "Note title must not be empty")
+    @NotBlank(message = "Note title must not be empty")
     private String title;
 
-	@NotBlank(message = "Note content must not be empty")
+    @NotBlank(message = "Note content must not be empty")
     private String content;
 
     @Column(nullable = false, updatable = false)
