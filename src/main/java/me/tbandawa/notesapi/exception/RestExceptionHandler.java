@@ -17,12 +17,12 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler({NoteNotFoundException.class})
     public ResponseEntity<ErrorResponse> noteNotFound(NoteNotFoundException ex, WebRequest request){
         ErrorResponse apiResponse =new ErrorResponse.ErrorResponseBuilder()
-                                .withDetail("Not able to find customer record")
-                                .withMessage("Not a valid user id.Please provide a valid user id or contact system admin.")
-                                .withErrorCode("404")
-                                .withStatus(HttpStatus.NOT_FOUND)
-                                .withTimeStamp(LocalDateTime.now(ZoneOffset.UTC))
-                                .build();
+        		.withDetail("Not able to find customer record")
+                .withMessage("Not a valid user id.Please provide a valid user id or contact system admin.")
+                .withErrorCode("404")
+                .withStatus(HttpStatus.NOT_FOUND)
+                .withTimeStamp(LocalDateTime.now(ZoneOffset.UTC))
+                .build();
         return new ResponseEntity<ErrorResponse>(apiResponse, HttpStatus.NOT_FOUND);
     }
     
