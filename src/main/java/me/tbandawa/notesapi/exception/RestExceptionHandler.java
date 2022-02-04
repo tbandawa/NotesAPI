@@ -16,19 +16,19 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 	
     @ExceptionHandler({NoteNotFoundException.class})
     public ResponseEntity<ErrorResponse> noteNotFound(NoteNotFoundException ex, WebRequest request){
-        ErrorResponse apiResponse =new ErrorResponse.ErrorResponseBuilder()
+        ErrorResponse errorResponse =new ErrorResponse.ErrorResponseBuilder()
         		.withDetail("Not able to find customer record")
                 .withMessage("Not a valid user id.Please provide a valid user id or contact system admin.")
                 .withErrorCode("404")
                 .withStatus(HttpStatus.NOT_FOUND)
                 .withTimeStamp(LocalDateTime.now(ZoneOffset.UTC))
                 .build();
-        return new ResponseEntity<ErrorResponse>(apiResponse, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<ErrorResponse>(errorResponse, HttpStatus.NOT_FOUND);
     }
     
     @ExceptionHandler(NoteServiceException.class)
     protected ResponseEntity<Object> handleCustomAPIException(NoteServiceException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
-    	ErrorResponse response =new ErrorResponse.ErrorResponseBuilder()
+    	ErrorResponse errorResponse =new ErrorResponse.ErrorResponseBuilder()
                 .withStatus(status)
                 .withDetail("custom exception")
                 .withMessage(ex.getLocalizedMessage())
@@ -36,12 +36,12 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
                 .withStatus(status.SERVICE_UNAVAILABLE)
                 .withTimeStamp(LocalDateTime.now(ZoneOffset.UTC))
                 .build();
-        return new ResponseEntity<>(response, response.getHttpStatus());
+        return new ResponseEntity<>(errorResponse, errorResponse.getHttpStatus());
     }
     
     @ExceptionHandler(Exception.class)
     protected ResponseEntity<Object> handleCustomAPIException(Exception ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
-    	ErrorResponse response =new ErrorResponse.ErrorResponseBuilder()
+    	ErrorResponse errorResponse =new ErrorResponse.ErrorResponseBuilder()
                 .withStatus(status)
                 .withDetail("Something went wrong")
                 .withMessage(ex.getLocalizedMessage())
@@ -49,7 +49,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
                 .withStatus(status.BAD_GATEWAY)
                 .withTimeStamp(LocalDateTime.now(ZoneOffset.UTC))
                 .build();
-        return new ResponseEntity<>(response, response.getHttpStatus());
+        return new ResponseEntity<>(errorResponse, errorResponse.getHttpStatus());
     }
 
 }
