@@ -10,8 +10,7 @@ public class ErrorResponse {
     private HttpStatus httpStatus;
     private String errorCode;
     private String message;
-    private List<String> messages;
-    private String detail;
+    private List<String> details;
     private LocalDateTime timeStamp;
         
     public HttpStatus getHttpStatus() {
@@ -38,20 +37,12 @@ public class ErrorResponse {
 		this.message = message;
 	}
 
-	public List<String> getMessages() {
-		return messages;
+	public List<String> getDetails() {
+		return details;
 	}
 
-	public void setMessages(List<String> messages) {
-		this.messages = messages;
-	}
-
-	public String getDetail() {
-		return detail;
-	}
-
-	public void setDetail(String detail) {
-		this.detail = detail;
+	public void setDetails(List<String> details) {
+		this.details = details;
 	}
 
 	public LocalDateTime getTimeStamp() {
@@ -67,8 +58,7 @@ public class ErrorResponse {
         private HttpStatus httpStatus;
         private String errorCode;
         private String message;
-        private List<String> messages;
-        private String detail;
+        private List<String> details;
         private LocalDateTime timeStamp;
         
         public ErrorResponseBuilder() {}
@@ -91,14 +81,9 @@ public class ErrorResponse {
         	this.message = message;
         	return this;
         }
-        
-        public ErrorResponseBuilder withMessages(List<String> messages) {
-        	this.messages = messages;
-        	return this;
-        }
     	
-        public ErrorResponseBuilder withDetail(String detail) {
-        	this.detail = detail;
+        public ErrorResponseBuilder withDetails(List<String> details) {
+        	this.details = details;
         	return this;
         }
         
@@ -112,8 +97,7 @@ public class ErrorResponse {
         	errorResponse.httpStatus = this.httpStatus;
         	errorResponse.errorCode = this.errorCode;
         	errorResponse.message = this.message;
-        	errorResponse.messages = this.messages;
-        	errorResponse.detail = this.detail;
+        	errorResponse.details = this.details;
         	errorResponse.timeStamp = this.timeStamp;
         	return errorResponse;
         	
