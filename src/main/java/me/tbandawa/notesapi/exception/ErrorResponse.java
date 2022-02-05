@@ -9,6 +9,7 @@ public class ErrorResponse {
     private HttpStatus httpStatus;
     private String errorCode;
     private String message;
+    private String[] messages;
     private String detail;
     private LocalDateTime timeStamp;
         
@@ -36,6 +37,14 @@ public class ErrorResponse {
 		this.message = message;
 	}
 
+	public String[] getMessages() {
+		return messages;
+	}
+
+	public void setMessages(String[] messages) {
+		this.messages = messages;
+	}
+
 	public String getDetail() {
 		return detail;
 	}
@@ -57,6 +66,7 @@ public class ErrorResponse {
         private HttpStatus httpStatus;
         private String errorCode;
         private String message;
+        private String[] messages;
         private String detail;
         private LocalDateTime timeStamp;
         
@@ -80,6 +90,11 @@ public class ErrorResponse {
         	this.message = message;
         	return this;
         }
+        
+        public ErrorResponseBuilder withMessages(String[] messages) {
+        	this.messages = messages;
+        	return this;
+        }
     	
         public ErrorResponseBuilder withDetail(String detail) {
         	this.detail = detail;
@@ -96,6 +111,7 @@ public class ErrorResponse {
         	errorResponse.httpStatus = this.httpStatus;
         	errorResponse.errorCode = this.errorCode;
         	errorResponse.message = this.message;
+        	errorResponse.messages = this.messages;
         	errorResponse.detail = this.detail;
         	errorResponse.timeStamp = this.timeStamp;
         	return errorResponse;
