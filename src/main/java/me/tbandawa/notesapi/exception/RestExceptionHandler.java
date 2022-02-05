@@ -64,23 +64,15 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     protected ResponseEntity<Object> handleMethodArgumentNotValid(
     		MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
     	
-    	String validationErrors = "";
-        for(ObjectError error : ex.getBindingResult().getAllErrors()) {
-        	validationErrors += (error.getDefaultMessage() + System.lineSeparator());
+    	List<String> validationErrors = new ArrayList<>();
+        for(ObjectError objectError : ex.getBindingResult().getAllErrors()) {
+        	validationErrors.add(objectError.getDefaultMessage().toString());
         }
-        
-    	List<String> validationErrors0 = new ArrayList<String>();
-        for(ObjectError error : ex.getBindingResult().getAllErrors()) {
-        	validationErrors0.add(error.getDefaultMessage().toString());
-        	System.out.println(error.getDefaultMessage());
-        }
-        System.out.println(Arrays.toString(validationErrors0.toArray()));
   
     	ErrorResponse errorResponse = new ErrorResponse.ErrorResponseBuilder()
                 .withStatus(status)
-                .withDetail(validationErrors)
                 .withMessage("Invalid Inputs")
-                .withMessages((String[]) validationErrors0.toArray())
+                .withMessages(validationErrors)
                 .withErrorCode("400")
                 .withStatus(status.BAD_REQUEST)
                 .withTimeStamp(LocalDateTime.now(ZoneOffset.UTC))
