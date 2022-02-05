@@ -6,25 +6,16 @@ import java.util.List;
 public class ErrorResponse {
 	
     private int statusCode;
-    private String errorCode;
     private String message;
     private List<String> details;
     private LocalDateTime timeStamp;
         
-    public int getHttpStatus() {
+	public int getStatusCode() {
 		return statusCode;
 	}
 
 	public void setStatusCode(int statusCode) {
 		this.statusCode = statusCode;
-	}
-
-	public String getErrorCode() {
-		return errorCode;
-	}
-
-	public void setErrorCode(String errorCode) {
-		this.errorCode = errorCode;
 	}
 
 	public String getMessage() {
@@ -54,7 +45,6 @@ public class ErrorResponse {
 	public static final class ErrorResponseBuilder {
     	
 		private int statusCode;
-        private String errorCode;
         private String message;
         private List<String> details;
         private LocalDateTime timeStamp;
@@ -70,10 +60,6 @@ public class ErrorResponse {
         	return this;
         }
         
-        public ErrorResponseBuilder withErrorCode(String errorCode) {
-        	this.errorCode = errorCode;
-        	return this;
-        }
         
         public ErrorResponseBuilder withMessage(String message) {
         	this.message = message;
@@ -93,7 +79,6 @@ public class ErrorResponse {
         public ErrorResponse build() {
         	ErrorResponse errorResponse = new ErrorResponse();
         	errorResponse.statusCode = this.statusCode;
-        	errorResponse.errorCode = this.errorCode;
         	errorResponse.message = this.message;
         	errorResponse.details = this.details;
         	errorResponse.timeStamp = this.timeStamp;
