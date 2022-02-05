@@ -51,8 +51,8 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     		Exception exception, HttpHeaders headers, HttpStatus status, WebRequest request) {
     	ErrorResponse errorResponse = new ErrorResponse.ErrorResponseBuilder()
                 .withStatus(status)
-                .withDetail(exception.getLocalizedMessage())
                 .withMessage("Something went wrong")
+                .withDetail(exception.getLocalizedMessage())
                 .withErrorCode("502")
                 .withStatus(HttpStatus.BAD_GATEWAY)
                 .withTimeStamp(LocalDateTime.now(ZoneOffset.UTC))
@@ -72,7 +72,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     	ErrorResponse errorResponse = new ErrorResponse.ErrorResponseBuilder()
                 .withStatus(status)
                 .withMessage("Invalid Inputs")
-                .withMessages(validationErrors)
+                .withDetails(validationErrors)
                 .withErrorCode("400")
                 .withStatus(status.BAD_REQUEST)
                 .withTimeStamp(LocalDateTime.now(ZoneOffset.UTC))

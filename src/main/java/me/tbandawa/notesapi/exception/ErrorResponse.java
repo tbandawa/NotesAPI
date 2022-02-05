@@ -3,22 +3,20 @@ package me.tbandawa.notesapi.exception;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import org.springframework.http.HttpStatus;
-
 public class ErrorResponse {
 	
-    private HttpStatus httpStatus;
+    private int statusCode;
     private String errorCode;
     private String message;
     private List<String> details;
     private LocalDateTime timeStamp;
         
-    public HttpStatus getHttpStatus() {
-		return httpStatus;
+    public int getHttpStatus() {
+		return statusCode;
 	}
 
-	public void setHttpStatus(HttpStatus httpStatus) {
-		this.httpStatus = httpStatus;
+	public void setStatusCode(int statusCode) {
+		this.statusCode = statusCode;
 	}
 
 	public String getErrorCode() {
@@ -55,7 +53,7 @@ public class ErrorResponse {
 
 	public static final class ErrorResponseBuilder {
     	
-        private HttpStatus httpStatus;
+		private int statusCode;
         private String errorCode;
         private String message;
         private List<String> details;
@@ -67,8 +65,8 @@ public class ErrorResponse {
         	return new ErrorResponseBuilder();
         }
         
-        public ErrorResponseBuilder withStatus(HttpStatus httpStatus) {
-        	this.httpStatus = httpStatus;
+        public ErrorResponseBuilder withStatusCode(int statusCode) {
+        	this.statusCode = statusCode;
         	return this;
         }
         
@@ -94,7 +92,7 @@ public class ErrorResponse {
         
         public ErrorResponse build() {
         	ErrorResponse errorResponse = new ErrorResponse();
-        	errorResponse.httpStatus = this.httpStatus;
+        	errorResponse.statusCode = this.statusCode;
         	errorResponse.errorCode = this.errorCode;
         	errorResponse.message = this.message;
         	errorResponse.details = this.details;
