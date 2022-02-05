@@ -1,31 +1,21 @@
 package me.tbandawa.notesapi.exception;
 
 import java.time.LocalDateTime;
-
-import org.springframework.http.HttpStatus;
+import java.util.List;
 
 public class ErrorResponse {
 	
-    private HttpStatus httpStatus;
-    private String errorCode;
+    private int statusCode;
     private String message;
-    private String detail;
+    private List<String> details;
     private LocalDateTime timeStamp;
         
-    public HttpStatus getHttpStatus() {
-		return httpStatus;
+	public int getStatusCode() {
+		return statusCode;
 	}
 
-	public void setHttpStatus(HttpStatus httpStatus) {
-		this.httpStatus = httpStatus;
-	}
-
-	public String getErrorCode() {
-		return errorCode;
-	}
-
-	public void setErrorCode(String errorCode) {
-		this.errorCode = errorCode;
+	public void setStatusCode(int statusCode) {
+		this.statusCode = statusCode;
 	}
 
 	public String getMessage() {
@@ -36,12 +26,12 @@ public class ErrorResponse {
 		this.message = message;
 	}
 
-	public String getDetail() {
-		return detail;
+	public List<String> getDetails() {
+		return details;
 	}
 
-	public void setDetail(String detail) {
-		this.detail = detail;
+	public void setDetails(List<String> details) {
+		this.details = details;
 	}
 
 	public LocalDateTime getTimeStamp() {
@@ -54,10 +44,9 @@ public class ErrorResponse {
 
 	public static final class ErrorResponseBuilder {
     	
-        private HttpStatus httpStatus;
-        private String errorCode;
+		private int statusCode;
         private String message;
-        private String detail;
+        private List<String> details;
         private LocalDateTime timeStamp;
         
         public ErrorResponseBuilder() {}
@@ -66,23 +55,19 @@ public class ErrorResponse {
         	return new ErrorResponseBuilder();
         }
         
-        public ErrorResponseBuilder withStatus(HttpStatus httpStatus) {
-        	this.httpStatus = httpStatus;
+        public ErrorResponseBuilder withStatusCode(int statusCode) {
+        	this.statusCode = statusCode;
         	return this;
         }
         
-        public ErrorResponseBuilder withErrorCode(String errorCode) {
-        	this.errorCode = errorCode;
-        	return this;
-        }
         
         public ErrorResponseBuilder withMessage(String message) {
         	this.message = message;
         	return this;
         }
     	
-        public ErrorResponseBuilder withDetail(String detail) {
-        	this.detail = detail;
+        public ErrorResponseBuilder withDetails(List<String> details) {
+        	this.details = details;
         	return this;
         }
         
@@ -93,10 +78,9 @@ public class ErrorResponse {
         
         public ErrorResponse build() {
         	ErrorResponse errorResponse = new ErrorResponse();
-        	errorResponse.httpStatus = this.httpStatus;
-        	errorResponse.errorCode = this.errorCode;
+        	errorResponse.statusCode = this.statusCode;
         	errorResponse.message = this.message;
-        	errorResponse.detail = this.detail;
+        	errorResponse.details = this.details;
         	errorResponse.timeStamp = this.timeStamp;
         	return errorResponse;
         	

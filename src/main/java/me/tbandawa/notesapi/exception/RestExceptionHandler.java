@@ -1,6 +1,9 @@
 package me.tbandawa.notesapi.exception;
 
 import java.time.ZoneOffset;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.time.LocalDateTime;
 
 import org.springframework.http.HttpHeaders;
@@ -20,10 +23,9 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<ErrorResponse> noteNotFound(
     		NoteNotFoundException noteNotFoundException, WebRequest request){
         ErrorResponse errorResponse = new ErrorResponse.ErrorResponseBuilder()
-        		.withDetail(noteNotFoundException.getLocalizedMessage())
+        		.withStatusCode(HttpStatus.NOT_FOUND.value())
+        		.withDetails(Arrays.asList(noteNotFoundException.getLocalizedMessage()))
                 .withMessage("Note record not found")
-                .withErrorCode("404")
-                .withStatus(HttpStatus.NOT_FOUND)
                 .withTimeStamp(LocalDateTime.now(ZoneOffset.UTC))
                 .build();
         return new ResponseEntity<ErrorResponse>(errorResponse, HttpStatus.NOT_FOUND);
@@ -33,48 +35,42 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     protected ResponseEntity<Object> handleCustomAPIException(
     		NoteServiceException noteNotFoundException, HttpHeaders headers, HttpStatus status, WebRequest request) {
     	ErrorResponse errorResponse = new ErrorResponse.ErrorResponseBuilder()
-                .withStatus(status)
-                .withDetail(noteNotFoundException.getLocalizedMessage())
+                .withStatusCode(HttpStatus.SERVICE_UNAVAILABLE.value())
+                .withDetails(Arrays.asList(noteNotFoundException.getLocalizedMessage()))
                 .withMessage("Note Service Exception")
-                .withErrorCode("503")
-                .withStatus(status.SERVICE_UNAVAILABLE)
                 .withTimeStamp(LocalDateTime.now(ZoneOffset.UTC))
                 .build();
-        return new ResponseEntity<>(errorResponse, errorResponse.getHttpStatus());
+        return new ResponseEntity<>(errorResponse, HttpStatus.SERVICE_UNAVAILABLE);
     }
     
     @ExceptionHandler(Exception.class)
     protected ResponseEntity<Object> handleCustomAPIException(
     		Exception exception, HttpHeaders headers, HttpStatus status, WebRequest request) {
     	ErrorResponse errorResponse = new ErrorResponse.ErrorResponseBuilder()
-                .withStatus(status)
-                .withDetail(exception.getLocalizedMessage())
+                .withStatusCode(HttpStatus.BAD_GATEWAY.value())
                 .withMessage("Something went wrong")
-                .withErrorCode("502")
-                .withStatus(HttpStatus.BAD_GATEWAY)
+                .withDetails(Arrays.asList(exception.getLocalizedMessage()))
                 .withTimeStamp(LocalDateTime.now(ZoneOffset.UTC))
                 .build();
-        return new ResponseEntity<>(errorResponse, errorResponse.getHttpStatus());
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_GATEWAY);
     }
     
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(
     		MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
     	
-    	String validationErrors = "";
-        for(ObjectError error : ex.getBindingResult().getAllErrors()) {
-        	validationErrors += (error.getDefaultMessage() + System.lineSeparator());
+    	List<String> validationErrors = new ArrayList<>();
+        for(ObjectError objectError : ex.getBindingResult().getAllErrors()) {
+        	validationErrors.add(objectError.getDefaultMessage().toString());
         }
   
     	ErrorResponse errorResponse = new ErrorResponse.ErrorResponseBuilder()
-                .withStatus(status)
-                .withDetail(validationErrors)
+                .withStatusCode(HttpStatus.BAD_REQUEST.value())
                 .withMessage("Invalid Inputs")
-                .withErrorCode("400")
-                .withStatus(status.BAD_REQUEST)
+                .withDetails(validationErrors)
                 .withTimeStamp(LocalDateTime.now(ZoneOffset.UTC))
                 .build();
-    	return new ResponseEntity<>(errorResponse, errorResponse.getHttpStatus());
+    	return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
 }
