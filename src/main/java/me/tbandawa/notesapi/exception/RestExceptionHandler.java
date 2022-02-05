@@ -1,6 +1,9 @@
 package me.tbandawa.notesapi.exception;
 
 import java.time.ZoneOffset;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.time.LocalDateTime;
 
 import org.springframework.http.HttpHeaders;
@@ -65,11 +68,19 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         for(ObjectError error : ex.getBindingResult().getAllErrors()) {
         	validationErrors += (error.getDefaultMessage() + System.lineSeparator());
         }
+        
+    	List<String> validationErrors0 = new ArrayList<String>();
+        for(ObjectError error : ex.getBindingResult().getAllErrors()) {
+        	validationErrors0.add(error.getDefaultMessage().toString());
+        	System.out.println(error.getDefaultMessage());
+        }
+        System.out.println(Arrays.toString(validationErrors0.toArray()));
   
     	ErrorResponse errorResponse = new ErrorResponse.ErrorResponseBuilder()
                 .withStatus(status)
                 .withDetail(validationErrors)
                 .withMessage("Invalid Inputs")
+                .withMessages((String[]) validationErrors0.toArray())
                 .withErrorCode("400")
                 .withStatus(status.BAD_REQUEST)
                 .withTimeStamp(LocalDateTime.now(ZoneOffset.UTC))
