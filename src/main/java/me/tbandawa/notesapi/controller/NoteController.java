@@ -46,8 +46,7 @@ public class NoteController {
 	             .orElseThrow(() -> new NoteNotFoundException("Note", "id", noteId));
 	     note.setTitle(noteDetails.getTitle());
 	     note.setContent(noteDetails.getContent());
-	     Note updatedNote = noteRepository.save(note);
-	     return updatedNote;
+		 return noteRepository.save(note);
 	 }
 	 
 	 // Delete a Note
